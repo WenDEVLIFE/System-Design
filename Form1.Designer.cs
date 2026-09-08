@@ -4,6 +4,10 @@ namespace StudentSystem
 {
     partial class Form1
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -282,71 +286,6 @@ namespace StudentSystem
 
         }
 
-        private void label11_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void pictureBox2_Click_1(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void label7_Click_1(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         private System.Windows.Forms.TextBox textBox1;
@@ -369,4 +308,3 @@ namespace StudentSystem
         private System.Windows.Forms.PictureBox pictureBox3;
     }
 }
-

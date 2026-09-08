@@ -1,12 +1,13 @@
-﻿using System;
-
-namespace System_Design
+﻿namespace System_Design
 {
-    internal class Dashboard
+    internal sealed class Dashboard
     {
-        internal void Show()
+        public void Show()
         {
-            throw new NotImplementedException();
+            using (DashboardForm form = new DashboardForm())
+            {
+                form.ShowDialog();
+            }
         }
     }
 }

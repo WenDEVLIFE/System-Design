@@ -1,21 +1,57 @@
-C:\food\System Design\System Design\bin\Debug\System Design.exe.config
-C:\food\System Design\System Design\bin\Debug\System Design.exe
-C:\food\System Design\System Design\bin\Debug\System Design.pdb
-C:\food\System Design\System Design\obj\Debug\System Design.csproj.AssemblyReference.cache
-C:\food\System Design\System Design\obj\Debug\System_Design.Form1.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form2.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form3.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form4.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form5.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Properties.Resources.resources
-C:\food\System Design\System Design\obj\Debug\System Design.csproj.GenerateResource.cache
-C:\food\System Design\System Design\obj\Debug\System Design.csproj.CoreCompileInputs.cache
-C:\food\System Design\System Design\obj\Debug\System Design.exe
-C:\food\System Design\System Design\obj\Debug\System Design.pdb
-C:\food\System Design\System Design\obj\Debug\System Design.exe.config
-C:\food\System Design\System Design\obj\Debug\StudentSystem.Form1.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form6.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form7.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form9.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form10.resources
-C:\food\System Design\System Design\obj\Debug\System_Design.Form11.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System Design.csproj.AssemblyReference.cache
+E:\desktop_gui_projects\System Design\obj\Debug\System Design.csproj.SuggestedBindingRedirects.cache
+E:\desktop_gui_projects\System Design\obj\Debug\System Design.exe.config
+E:\desktop_gui_projects\System Design\obj\Debug\StudentSystem.Form1.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form10.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form11.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form2.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form3.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form4.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form5.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form6.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form7.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Form9.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System_Design.Properties.Resources.resources
+E:\desktop_gui_projects\System Design\obj\Debug\System Design.csproj.GenerateResource.cache
+E:\desktop_gui_projects\System Design\obj\Debug\System Design.csproj.CoreCompileInputs.cache
+E:\desktop_gui_projects\System Design\bin\Debug\System Design.exe.config
+E:\desktop_gui_projects\System Design\bin\Debug\System Design.exe
+E:\desktop_gui_projects\System Design\bin\Debug\System Design.pdb
+E:\desktop_gui_projects\System Design\bin\Debug\BCrypt-Net-Next.dll
+E:\desktop_gui_projects\System Design\bin\Debug\BouncyCastle.Cryptography.dll
+E:\desktop_gui_projects\System Design\bin\Debug\Castle.Core.dll
+E:\desktop_gui_projects\System Design\bin\Debug\FakeItEasy.dll
+E:\desktop_gui_projects\System Design\bin\Debug\Google.Protobuf.dll
+E:\desktop_gui_projects\System Design\bin\Debug\K4os.Compression.LZ4.dll
+E:\desktop_gui_projects\System Design\bin\Debug\K4os.Compression.LZ4.Streams.dll
+E:\desktop_gui_projects\System Design\bin\Debug\K4os.Hash.xxHash.dll
+E:\desktop_gui_projects\System Design\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+E:\desktop_gui_projects\System Design\bin\Debug\MySql.Data.dll
+E:\desktop_gui_projects\System Design\bin\Debug\System.Buffers.dll
+E:\desktop_gui_projects\System Design\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+E:\desktop_gui_projects\System Design\bin\Debug\System.IO.Pipelines.dll
+E:\desktop_gui_projects\System Design\bin\Debug\System.Memory.dll
+E:\desktop_gui_projects\System Design\bin\Debug\System.Numerics.Vectors.dll
+E:\desktop_gui_projects\System Design\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+E:\desktop_gui_projects\System Design\bin\Debug\System.Threading.Tasks.Extensions.dll
+E:\desktop_gui_projects\System Design\bin\Debug\ZstdSharp.dll
+E:\desktop_gui_projects\System Design\bin\Debug\Castle.Core.xml
+E:\desktop_gui_projects\System Design\bin\Debug\FakeItEasy.xml
+E:\desktop_gui_projects\System Design\bin\Debug\MySql.Data.xml
+E:\desktop_gui_projects\System Design\bin\Debug\BouncyCastle.Cryptography.xml
+E:\desktop_gui_projects\System Design\bin\Debug\Google.Protobuf.pdb
+E:\desktop_gui_projects\System Design\bin\Debug\Google.Protobuf.xml
+E:\desktop_gui_projects\System Design\bin\Debug\K4os.Compression.LZ4.xml
+E:\desktop_gui_projects\System Design\bin\Debug\K4os.Compression.LZ4.Streams.xml
+E:\desktop_gui_projects\System Design\bin\Debug\K4os.Hash.xxHash.xml
+E:\desktop_gui_projects\System Design\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+E:\desktop_gui_projects\System Design\bin\Debug\System.Buffers.xml
+E:\desktop_gui_projects\System Design\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+E:\desktop_gui_projects\System Design\bin\Debug\System.IO.Pipelines.xml
+E:\desktop_gui_projects\System Design\bin\Debug\System.Memory.xml
+E:\desktop_gui_projects\System Design\bin\Debug\System.Numerics.Vectors.xml
+E:\desktop_gui_projects\System Design\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+E:\desktop_gui_projects\System Design\bin\Debug\System.Threading.Tasks.Extensions.xml
+E:\desktop_gui_projects\System Design\obj\Debug\System D.7FA557F0.Up2Date
+E:\desktop_gui_projects\System Design\obj\Debug\System Design.exe
+E:\desktop_gui_projects\System Design\obj\Debug\System Design.pdb
