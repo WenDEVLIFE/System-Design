@@ -1,0 +1,21 @@
+C:\food\System Design\System Design\bin\Debug\System Design.exe.config
+C:\food\System Design\System Design\bin\Debug\System Design.exe
+C:\food\System Design\System Design\bin\Debug\System Design.pdb
+C:\food\System Design\System Design\obj\Debug\System Design.csproj.AssemblyReference.cache
+C:\food\System Design\System Design\obj\Debug\System_Design.Form1.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form2.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form3.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form4.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form5.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Properties.Resources.resources
+C:\food\System Design\System Design\obj\Debug\System Design.csproj.GenerateResource.cache
+C:\food\System Design\System Design\obj\Debug\System Design.csproj.CoreCompileInputs.cache
+C:\food\System Design\System Design\obj\Debug\System Design.exe
+C:\food\System Design\System Design\obj\Debug\System Design.pdb
+C:\food\System Design\System Design\obj\Debug\System Design.exe.config
+C:\food\System Design\System Design\obj\Debug\StudentSystem.Form1.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form6.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form7.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form9.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form10.resources
+C:\food\System Design\System Design\obj\Debug\System_Design.Form11.resources
