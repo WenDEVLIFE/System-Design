@@ -1,3 +1,4 @@
+using System;
 using MySql.Data.MySqlClient;
 
 namespace System_Design
@@ -43,23 +44,90 @@ namespace System_Design
             }
         }
 
-        public void EnsureSchema()
+        /// <summary>
+        /// Creates a new user, hashing the password with BCrypt. The username is never
+        /// stored in plaintext form beyond its literal value, and the password is never
+        /// stored or returned. Returns null when the username is already taken.
+        /// </summary>
+        public User CreateUser(string username, string password, string role)
         {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                return null;
+            }
+
+            string normalizedRole = string.IsNullOrWhiteSpace(role) ? "user" : role.Trim();
+            string passwordHash = PasswordHasher.HashPassword(password);
+
             using (MySqlConnection connection = Database.OpenConnection())
             using (MySqlCommand command = new MySqlCommand(
-                @"CREATE TABLE IF NOT EXISTS users (
-                    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                    username VARCHAR(50) NOT NULL,
-                    password_hash VARCHAR(255) NOT NULL,
-                    role VARCHAR(20) NOT NULL DEFAULT 'user',
-                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (id),
-                    UNIQUE KEY uq_users_username (username)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+                @"INSERT INTO users (username, password_hash, role)
+                  VALUES (@username, @passwordHash, @role);",
                 connection))
             {
-                command.ExecuteNonQuery();
+                command.Parameters.AddWithValue("@username", username.Trim());
+                command.Parameters.AddWithValue("@passwordHash", passwordHash);
+                command.Parameters.AddWithValue("@role", normalizedRole);
+
+                int inserted;
+                try
+                {
+                    inserted = command.ExecuteNonQuery();
+                }
+                catch (MySqlException exception)
+                {
+                    if (exception.Number == 1062)
+                    {
+                        // Duplicate entry on uq_users_username.
+                        return null;
+                    }
+
+                    throw;
+                }
+
+                if (inserted <= 0)
+                {
+                    return null;
+                }
+
+                return new User
+                {
+                    Username = username.Trim(),
+                    Role = normalizedRole
+                };
             }
+        }
+
+        /// <summary>
+        /// Replaces the password for an existing user with a fresh BCrypt hash.
+        /// Returns false when no user with that username exists.
+        /// </summary>
+        public bool UpdatePassword(string username, string newPassword)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(newPassword))
+            {
+                return false;
+            }
+
+            string passwordHash = PasswordHasher.HashPassword(newPassword);
+
+            using (MySqlConnection connection = Database.OpenConnection())
+            using (MySqlCommand command = new MySqlCommand(
+                @"UPDATE users
+                  SET password_hash = @passwordHash
+                  WHERE username = @username;",
+                connection))
+            {
+                command.Parameters.AddWithValue("@username", username.Trim());
+                command.Parameters.AddWithValue("@passwordHash", passwordHash);
+
+                return command.ExecuteNonQuery() > 0;
+            }
+        }
+
+        public void EnsureSchema()
+        {
+            Schema.EnsureAll();
         }
     }
 }
