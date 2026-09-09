@@ -50,7 +50,15 @@ namespace StudentSystem
 
                 this.Hide();
                 new Dashboard().Show();
-                Application.Exit();
+
+                if (!Session.IsAuthenticated)
+                {
+                    this.Show();
+                }
+                else
+                {
+                    Application.Exit();
+                }
             }
             catch (MySqlException)
             {
@@ -97,10 +105,25 @@ namespace StudentSystem
 
         private void label9_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Registration is not implemented yet.",
-                "Register",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            using (RegisterForm registerForm = new RegisterForm())
+            {
+                if (registerForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    MessageBox.Show(this,
+                        "Your account was created. You can now log in with your new credentials.",
+                        "Register",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+            using (ForgotPasswordForm forgotPasswordForm = new ForgotPasswordForm())
+            {
+                forgotPasswordForm.ShowDialog(this);
+            }
         }
 
         private void label5_Click(object sender, EventArgs e)

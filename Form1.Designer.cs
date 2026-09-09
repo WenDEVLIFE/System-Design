@@ -206,6 +206,7 @@ namespace StudentSystem
             this.label10.Size = new System.Drawing.Size(112, 19);
             this.label10.TabIndex = 16;
             this.label10.Text = "Forgot Password";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // label11
             // 
