@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 using StudentSystem;
 
 namespace System_Design
@@ -17,6 +15,31 @@ namespace System_Design
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            try
+            {
+                Schema.EnsureAll();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(
+                    "Unable to reach the database. Please make sure MySQL is running and the " +
+                    "'student_management' database exists (import database.sql), then try again.",
+                    "Database Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(
+                    "An unexpected error occurred while initializing the database. Please try again.",
+                    "Startup Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
             Application.Run(new Form1());
         }
     }
