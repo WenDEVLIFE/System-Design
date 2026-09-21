@@ -12,8 +12,9 @@ namespace System_Design
 
             using (MySqlConnection connection = Database.OpenConnection())
             using (MySqlCommand command = new MySqlCommand(
-                @"SELECT s.id, s.student_number, s.first_name, s.last_name, s.email, s.phone,
-                         s.course_id, c.name AS course_name
+                @"SELECT s.id, s.student_number, s.first_name, s.middle_name, s.last_name,
+                         s.gender, s.date_of_birth, s.year_level, s.address, s.email, s.phone,
+                         s.status, s.photo_path, s.course_id, c.name AS course_name
                   FROM students s
                   LEFT JOIN courses c ON c.id = s.course_id
                   ORDER BY s.student_number;",
@@ -33,8 +34,9 @@ namespace System_Design
         {
             using (MySqlConnection connection = Database.OpenConnection())
             using (MySqlCommand command = new MySqlCommand(
-                @"SELECT s.id, s.student_number, s.first_name, s.last_name, s.email, s.phone,
-                         s.course_id, c.name AS course_name
+                @"SELECT s.id, s.student_number, s.first_name, s.middle_name, s.last_name,
+                         s.gender, s.date_of_birth, s.year_level, s.address, s.email, s.phone,
+                         s.status, s.photo_path, s.course_id, c.name AS course_name
                   FROM students s
                   LEFT JOIN courses c ON c.id = s.course_id
                   WHERE s.id = @id
@@ -60,8 +62,10 @@ namespace System_Design
             using (MySqlConnection connection = Database.OpenConnection())
             {
                 using (MySqlCommand command = new MySqlCommand(
-                    @"INSERT INTO students (student_number, first_name, last_name, email, phone, course_id)
-                      VALUES (@studentNumber, @firstName, @lastName, @email, @phone, @courseId);",
+                    @"INSERT INTO students 
+                      (student_number, first_name, middle_name, last_name, gender, date_of_birth, year_level, address, email, phone, status, photo_path, course_id)
+                      VALUES 
+                      (@studentNumber, @firstName, @middleName, @lastName, @gender, @dateOfBirth, @yearLevel, @address, @email, @phone, @status, @photoPath, @courseId);",
                     connection))
                 {
                     AddParameters(command, student);
@@ -89,9 +93,16 @@ namespace System_Design
                 @"UPDATE students
                   SET student_number = @studentNumber,
                       first_name = @firstName,
+                      middle_name = @middleName,
                       last_name = @lastName,
+                      gender = @gender,
+                      date_of_birth = @dateOfBirth,
+                      year_level = @yearLevel,
+                      address = @address,
                       email = @email,
                       phone = @phone,
+                      status = @status,
+                      photo_path = @photoPath,
                       course_id = @courseId
                   WHERE id = @id;",
                 connection))
@@ -119,9 +130,16 @@ namespace System_Design
         {
             command.Parameters.AddWithValue("@studentNumber", student.StudentNumber);
             command.Parameters.AddWithValue("@firstName", student.FirstName);
+            command.Parameters.AddWithValue("@middleName", (object)student.MiddleName ?? DBNull.Value);
             command.Parameters.AddWithValue("@lastName", student.LastName);
+            command.Parameters.AddWithValue("@gender", (object)student.Gender ?? DBNull.Value);
+            command.Parameters.AddWithValue("@dateOfBirth", (object)student.DateOfBirth ?? DBNull.Value);
+            command.Parameters.AddWithValue("@yearLevel", (object)student.YearLevel ?? DBNull.Value);
+            command.Parameters.AddWithValue("@address", (object)student.Address ?? DBNull.Value);
             command.Parameters.AddWithValue("@email", (object)student.Email ?? DBNull.Value);
             command.Parameters.AddWithValue("@phone", (object)student.Phone ?? DBNull.Value);
+            command.Parameters.AddWithValue("@status", string.IsNullOrWhiteSpace(student.Status) ? "Active" : student.Status);
+            command.Parameters.AddWithValue("@photoPath", (object)student.PhotoPath ?? DBNull.Value);
             command.Parameters.AddWithValue("@courseId", (object)student.CourseId ?? DBNull.Value);
         }
 
@@ -132,9 +150,16 @@ namespace System_Design
                 Id = reader.GetInt32(reader.GetOrdinal("id")),
                 StudentNumber = reader.GetString(reader.GetOrdinal("student_number")),
                 FirstName = reader.GetString(reader.GetOrdinal("first_name")),
+                MiddleName = ReadNullableString(reader, "middle_name"),
                 LastName = reader.GetString(reader.GetOrdinal("last_name")),
+                Gender = ReadNullableString(reader, "gender"),
+                DateOfBirth = ReadNullableDateTime(reader, "date_of_birth"),
+                YearLevel = ReadNullableString(reader, "year_level"),
+                Address = ReadNullableString(reader, "address"),
                 Email = ReadNullableString(reader, "email"),
                 Phone = ReadNullableString(reader, "phone"),
+                Status = ReadNullableString(reader, "status") ?? "Active",
+                PhotoPath = ReadNullableString(reader, "photo_path"),
                 CourseId = ReadNullableInt32(reader, "course_id")
             };
 
@@ -150,6 +175,12 @@ namespace System_Design
         {
             int ordinal = reader.GetOrdinal(column);
             return reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
+        }
+
+        private static DateTime? ReadNullableDateTime(MySqlDataReader reader, string column)
+        {
+            int ordinal = reader.GetOrdinal(column);
+            return reader.IsDBNull(ordinal) ? (DateTime?)null : reader.GetDateTime(ordinal);
         }
 
         private static int? ReadNullableInt32(MySqlDataReader reader, string column)

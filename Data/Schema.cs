@@ -1,14 +1,8 @@
+using System;
 using MySql.Data.MySqlClient;
 
 namespace System_Design
 {
-    /// <summary>
-    /// Idempotently provisions the full application schema (users, courses, students,
-    /// enrollments). Called once at startup so the app self-provisions without needing
-    /// a manual .sql import. Tables are created in dependency order so the foreign keys
-    /// resolve. The database itself must already exist (create it by importing
-    /// database.sql, or the connection will fail with a friendly startup message).
-    /// </summary>
     internal static class Schema
     {
         public static void EnsureAll()
@@ -19,6 +13,43 @@ namespace System_Design
                 Execute(connection, CreateCourses);
                 Execute(connection, CreateStudents);
                 Execute(connection, CreateEnrollments);
+
+                // Migrations for student extended attributes
+                AddColumnIfNotExists(connection, "students", "middle_name", "VARCHAR(50) NULL AFTER first_name");
+                AddColumnIfNotExists(connection, "students", "gender", "VARCHAR(20) NULL AFTER last_name");
+                AddColumnIfNotExists(connection, "students", "date_of_birth", "DATE NULL AFTER gender");
+                AddColumnIfNotExists(connection, "students", "year_level", "VARCHAR(20) NULL AFTER date_of_birth");
+                AddColumnIfNotExists(connection, "students", "address", "VARCHAR(255) NULL AFTER year_level");
+                AddColumnIfNotExists(connection, "students", "status", "VARCHAR(20) NOT NULL DEFAULT 'Active' AFTER phone");
+                AddColumnIfNotExists(connection, "students", "photo_path", "VARCHAR(255) NULL AFTER status");
+            }
+        }
+
+        private static void AddColumnIfNotExists(MySqlConnection connection, string table, string column, string columnDef)
+        {
+            try
+            {
+                string sql = string.Format(
+                    @"SELECT COUNT(*) FROM information_schema.COLUMNS 
+                      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{0}' AND COLUMN_NAME = '{1}';",
+                    table, column);
+
+                using (MySqlCommand checkCmd = new MySqlCommand(sql, connection))
+                {
+                    long count = Convert.ToInt64(checkCmd.ExecuteScalar());
+                    if (count == 0)
+                    {
+                        string alterSql = string.Format("ALTER TABLE `{0}` ADD COLUMN `{1}` {2};", table, column, columnDef);
+                        using (MySqlCommand alterCmd = new MySqlCommand(alterSql, connection))
+                        {
+                            alterCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Graceful fallback if information_schema check differs
             }
         }
 
@@ -57,9 +88,16 @@ namespace System_Design
                 id INT UNSIGNED NOT NULL AUTO_INCREMENT,
                 student_number VARCHAR(20) NOT NULL,
                 first_name VARCHAR(50) NOT NULL,
+                middle_name VARCHAR(50) NULL,
                 last_name VARCHAR(50) NOT NULL,
+                gender VARCHAR(20) NULL,
+                date_of_birth DATE NULL,
+                year_level VARCHAR(20) NULL,
+                address VARCHAR(255) NULL,
                 email VARCHAR(100) NULL,
                 phone VARCHAR(20) NULL,
+                status VARCHAR(20) NOT NULL DEFAULT 'Active',
+                photo_path VARCHAR(255) NULL,
                 course_id INT UNSIGNED NULL,
                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id),
