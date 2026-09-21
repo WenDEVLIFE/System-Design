@@ -10,7 +10,21 @@ namespace System_Design
 
         public int CourseId { get; set; }
 
+        public decimal? Prelim { get; set; }
+
+        public decimal? Midterm { get; set; }
+
+        public decimal? Finals { get; set; }
+
+        public decimal? Activities { get; set; }
+
         public decimal? Grade { get; set; }
+
+        public decimal? Gpa { get; set; }
+
+        public string SchoolYear { get; set; }
+
+        public string Semester { get; set; }
 
         public DateTime EnrolledAt { get; set; }
 

@@ -22,6 +22,15 @@ namespace System_Design
                 AddColumnIfNotExists(connection, "students", "address", "VARCHAR(255) NULL AFTER year_level");
                 AddColumnIfNotExists(connection, "students", "status", "VARCHAR(20) NOT NULL DEFAULT 'Active' AFTER phone");
                 AddColumnIfNotExists(connection, "students", "photo_path", "VARCHAR(255) NULL AFTER status");
+
+                // Migrations for enrollment extended grade attributes
+                AddColumnIfNotExists(connection, "enrollments", "prelim", "DECIMAL(5,2) NULL AFTER course_id");
+                AddColumnIfNotExists(connection, "enrollments", "midterm", "DECIMAL(5,2) NULL AFTER prelim");
+                AddColumnIfNotExists(connection, "enrollments", "finals", "DECIMAL(5,2) NULL AFTER midterm");
+                AddColumnIfNotExists(connection, "enrollments", "activities", "DECIMAL(5,2) NULL AFTER finals");
+                AddColumnIfNotExists(connection, "enrollments", "gpa", "DECIMAL(3,2) NULL AFTER grade");
+                AddColumnIfNotExists(connection, "enrollments", "school_year", "VARCHAR(20) NULL DEFAULT '2024-2025' AFTER gpa");
+                AddColumnIfNotExists(connection, "enrollments", "semester", "VARCHAR(20) NULL DEFAULT '1st Semester' AFTER school_year");
             }
         }
 
@@ -49,7 +58,7 @@ namespace System_Design
             }
             catch
             {
-                // Graceful fallback if information_schema check differs
+                // Graceful fallback
             }
         }
 
@@ -112,7 +121,14 @@ namespace System_Design
                 id INT UNSIGNED NOT NULL AUTO_INCREMENT,
                 student_id INT UNSIGNED NOT NULL,
                 course_id INT UNSIGNED NOT NULL,
+                prelim DECIMAL(5,2) NULL,
+                midterm DECIMAL(5,2) NULL,
+                finals DECIMAL(5,2) NULL,
+                activities DECIMAL(5,2) NULL,
                 grade DECIMAL(5,2) NULL,
+                gpa DECIMAL(3,2) NULL,
+                school_year VARCHAR(20) NULL DEFAULT '2024-2025',
+                semester VARCHAR(20) NULL DEFAULT '1st Semester',
                 enrolled_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id),
                 UNIQUE KEY uq_enrollments_student_course (student_id, course_id),
