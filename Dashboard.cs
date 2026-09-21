@@ -1,10 +1,10 @@
-﻿namespace System_Design
+namespace System_Design
 {
     internal sealed class Dashboard
     {
         public void Show()
         {
-            using (DashboardForm form = new DashboardForm())
+            using (Form2 form = new Form2())
             {
                 form.ShowDialog();
             }

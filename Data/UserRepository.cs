@@ -125,6 +125,28 @@ namespace System_Design
             }
         }
 
+        public System.Collections.Generic.List<User> GetAll()
+        {
+            var list = new System.Collections.Generic.List<User>();
+            using (MySqlConnection connection = Database.OpenConnection())
+            using (MySqlCommand command = new MySqlCommand(
+                "SELECT id, username, role FROM users ORDER BY username;",
+                connection))
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    list.Add(new User
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("id")),
+                        Username = reader.GetString(reader.GetOrdinal("username")),
+                        Role = reader.IsDBNull(reader.GetOrdinal("role")) ? "user" : reader.GetString(reader.GetOrdinal("role"))
+                    });
+                }
+            }
+            return list;
+        }
+
         public void EnsureSchema()
         {
             Schema.EnsureAll();

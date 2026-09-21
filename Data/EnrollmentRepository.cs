@@ -7,6 +7,34 @@ namespace System_Design
     internal sealed class EnrollmentRepository
     {
         /// <summary>
+        /// Returns all enrollments in the system joined with student and course details.
+        /// </summary>
+        public List<Enrollment> GetAll()
+        {
+            List<Enrollment> enrollments = new List<Enrollment>();
+
+            using (MySqlConnection connection = Database.OpenConnection())
+            using (MySqlCommand command = new MySqlCommand(
+                @"SELECT e.id, e.student_id, e.course_id, e.grade, e.enrolled_at,
+                         s.student_number, CONCAT(s.first_name, ' ', s.last_name) AS student_name,
+                         c.code AS course_code, c.name AS course_name
+                  FROM enrollments e
+                  JOIN students s ON s.id = e.student_id
+                  JOIN courses c ON c.id = e.course_id
+                  ORDER BY e.enrolled_at DESC, e.id DESC;",
+                connection))
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    enrollments.Add(Map(reader));
+                }
+            }
+
+            return enrollments;
+        }
+
+        /// <summary>
         /// Returns every enrollment for one student, joined with the course (and student)
         /// details so the UI can display course names without extra round trips.
         /// </summary>
