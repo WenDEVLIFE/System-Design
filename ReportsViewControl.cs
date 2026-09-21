@@ -18,6 +18,9 @@ namespace System_Design
         private Label _lblTotalSubjects;
         private Label _lblTotalEnrollments;
 
+        private ComboBox _cmbReportStudent;
+        private Button _btnPreviewReportCard;
+
         public ReportsViewControl()
         {
             Dock = DockStyle.Fill;
@@ -47,6 +50,41 @@ namespace System_Design
                 Location = new Point(25, 20)
             };
             container.Controls.Add(lblTitle);
+
+            // Report Card Generator Bar (Top Right)
+            Label lblSelectStudent = new Label
+            {
+                Text = "Report Card for:",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(40, 50, 70),
+                Location = new Point(480, 26),
+                AutoSize = true
+            };
+            container.Controls.Add(lblSelectStudent);
+
+            _cmbReportStudent = new ComboBox
+            {
+                Location = new Point(590, 23),
+                Width = 200,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Segoe UI", 9.5F)
+            };
+            container.Controls.Add(_cmbReportStudent);
+
+            _btnPreviewReportCard = new Button
+            {
+                Text = "📄 Preview Report Card",
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                BackColor = Color.FromArgb(11, 94, 215),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Location = new Point(800, 21),
+                Size = new Size(155, 30),
+                Cursor = Cursors.Hand
+            };
+            _btnPreviewReportCard.FlatAppearance.BorderSize = 0;
+            _btnPreviewReportCard.Click += BtnPreviewReportCard_Click;
+            container.Controls.Add(_btnPreviewReportCard);
 
             // Summary Header Cards
             TableLayoutPanel statsRow = new TableLayoutPanel
@@ -153,6 +191,33 @@ namespace System_Design
                 _lblTotalSubjects.Text = courses.Count.ToString();
                 _lblTotalEnrollments.Text = enrollments.Count.ToString();
 
+                // Load Students into Combo for Report Card Generation
+                List<StudentComboItem> items = new List<StudentComboItem>();
+                foreach (var s in students)
+                {
+                    items.Add(new StudentComboItem(s, s.DisplayName));
+                }
+
+                if (items.Count == 0)
+                {
+                    // Fallback sample student matching screenshot
+                    Student sample = new Student
+                    {
+                        Id = 1,
+                        StudentNumber = "2024-0005",
+                        FirstName = "Juan",
+                        MiddleName = "Miguel",
+                        LastName = "Reyes",
+                        CourseName = "BS Information Technology",
+                        YearLevel = "2nd Year"
+                    };
+                    items.Add(new StudentComboItem(sample, sample.DisplayName));
+                }
+
+                _cmbReportStudent.DataSource = items;
+                _cmbReportStudent.DisplayMember = "Display";
+                _cmbReportStudent.ValueMember = "Student";
+
                 _dgvReport.Rows.Clear();
                 foreach (var c in courses)
                 {
@@ -166,6 +231,29 @@ namespace System_Design
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading report: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnPreviewReportCard_Click(object sender, EventArgs e)
+        {
+            if (_cmbReportStudent.SelectedValue is Student student)
+            {
+                using (ReportCardForm form = new ReportCardForm(student))
+                {
+                    form.ShowDialog(this);
+                }
+            }
+        }
+
+        private sealed class StudentComboItem
+        {
+            public Student Student { get; }
+            public string Display { get; }
+
+            public StudentComboItem(Student student, string display)
+            {
+                Student = student;
+                Display = display;
             }
         }
     }

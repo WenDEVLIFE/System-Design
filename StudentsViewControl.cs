@@ -74,20 +74,24 @@ namespace System_Design
             container.Controls.Add(_txtSearch);
 
             // Action Buttons
-            _btnAddStudent = CreateButton("+ Add New Student", Color.FromArgb(11, 94, 215), 380, 63, 160);
+            _btnAddStudent = CreateButton("+ Add New Student", Color.FromArgb(11, 94, 215), 370, 63, 150);
             _btnAddStudent.Click += BtnAddStudent_Click;
 
-            _btnEditStudent = CreateButton("✏️ Edit Selected", Color.FromArgb(25, 135, 84), 550, 63, 140);
+            _btnEditStudent = CreateButton("✏️ Edit", Color.FromArgb(25, 135, 84), 530, 63, 90);
             _btnEditStudent.Click += BtnEditStudent_Click;
 
-            _btnDeleteStudent = CreateButton("🗑️ Delete", Color.FromArgb(220, 53, 69), 700, 63, 100);
+            Button btnReportCard = CreateButton("📄 Report Card", Color.FromArgb(138, 43, 226), 630, 63, 130);
+            btnReportCard.Click += BtnReportCard_Click;
+
+            _btnDeleteStudent = CreateButton("🗑️ Delete", Color.FromArgb(220, 53, 69), 770, 63, 90);
             _btnDeleteStudent.Click += BtnDeleteStudent_Click;
 
-            _btnRefresh = CreateButton("🔄 Refresh", Color.FromArgb(108, 117, 125), 810, 63, 110);
+            _btnRefresh = CreateButton("🔄 Refresh", Color.FromArgb(108, 117, 125), 870, 63, 90);
             _btnRefresh.Click += (s, e) => LoadData();
 
             container.Controls.Add(_btnAddStudent);
             container.Controls.Add(_btnEditStudent);
+            container.Controls.Add(btnReportCard);
             container.Controls.Add(_btnDeleteStudent);
             container.Controls.Add(_btnRefresh);
 
@@ -221,6 +225,26 @@ namespace System_Design
                     {
                         LoadData();
                     }
+                }
+            }
+        }
+
+        private void BtnReportCard_Click(object sender, EventArgs e)
+        {
+            if (_dgvStudents.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a student to preview their Report Card.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int studentId = Convert.ToInt32(_dgvStudents.SelectedRows[0].Cells["ID"].Value);
+            Student student = _allStudents.FirstOrDefault(s => s.Id == studentId);
+
+            if (student != null)
+            {
+                using (ReportCardForm form = new ReportCardForm(student))
+                {
+                    form.ShowDialog(this);
                 }
             }
         }
