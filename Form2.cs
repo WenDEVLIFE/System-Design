@@ -82,9 +82,16 @@ namespace System_Design
             _btnNavSettings = CreateNavItem(NavIconType.Settings, "Settings", btnY);
             btnY += btnHeight + btnSpacing;
 
-            // Logout at bottom of sidebar
-            _btnNavLogout = CreateNavItem(NavIconType.Logout, "Logout", 670);
-            _btnNavLogout.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            // Logout navigation item (positioned dynamically in sidebar)
+            _btnNavLogout = CreateNavItem(NavIconType.Logout, "Logout", btnY);
+            _pnlSidebar.Resize += (s, e) =>
+            {
+                if (_btnNavLogout != null && _pnlSidebar != null)
+                {
+                    int dynamicY = Math.Max(btnY, _pnlSidebar.ClientSize.Height - 52);
+                    _btnNavLogout.Location = new Point(10, dynamicY);
+                }
+            };
 
             _pnlSidebar.Controls.Add(_btnNavDashboard);
             _pnlSidebar.Controls.Add(_btnNavStudents);
@@ -123,10 +130,26 @@ namespace System_Design
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(40, 60, 110),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
-                Location = new Point(_pnlHeader.Width - 180, 14),
+                Location = new Point(_pnlHeader.Width - 210, 14),
                 AutoSize = true
             };
             _pnlHeader.Controls.Add(lblUserStatus);
+
+            Button btnHeaderLogout = new Button
+            {
+                Text = "Logout",
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.FromArgb(220, 53, 69),
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(80, 30),
+                Location = new Point(_pnlHeader.Width - 95, 9),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                Cursor = Cursors.Hand
+            };
+            btnHeaderLogout.FlatAppearance.BorderSize = 0;
+            btnHeaderLogout.Click += (s, e) => PerformLogout();
+            _pnlHeader.Controls.Add(btnHeaderLogout);
 
             // 3. Main Content Panel
             _pnlMainContent = new Panel
@@ -145,6 +168,15 @@ namespace System_Design
                 Location = new Point(10, y),
                 Size = new Size(190, 42)
             };
+        }
+
+        private void PerformLogout()
+        {
+            if (MessageBox.Show("Are you sure you want to log out?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Session.Logout();
+                Close();
+            }
         }
 
         private void InitViews()
@@ -167,14 +199,7 @@ namespace System_Design
             _btnNavUsers.Click += (s, e) => SetActiveView(_btnNavUsers, _viewUsers, "Users");
             _btnNavSettings.Click += (s, e) => SetActiveView(_btnNavSettings, _viewSettings, "Settings");
 
-            _btnNavLogout.Click += (s, e) =>
-            {
-                if (MessageBox.Show("Are you sure you want to log out?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    Session.Logout();
-                    Close();
-                }
-            };
+            _btnNavLogout.Click += (s, e) => PerformLogout();
         }
 
         private void SetActiveView(SidebarNavItem item, UserControl view, string title)
