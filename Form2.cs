@@ -300,7 +300,8 @@ namespace System_Design
 
             DoubleBuffered = true;
             Cursor = Cursors.Hand;
-            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            BackColor = Color.FromArgb(10, 45, 105);
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -319,43 +320,92 @@ namespace System_Design
 
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            base.OnPaint(pevent);
             Graphics g = pevent.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Draw Background Pill
+            // 1. Seamlessly match the parent's dark gradient background to eliminate any light-gray box artifacts!
+            if (Parent != null && Parent.Width > 0 && Parent.Height > 0)
+            {
+                using (LinearGradientBrush bgBrush = new LinearGradientBrush(
+                    new Rectangle(-Left, -Top, Parent.Width, Parent.Height),
+                    Color.FromArgb(10, 45, 105),
+                    Color.FromArgb(5, 18, 50),
+                    LinearGradientMode.Vertical))
+                {
+                    g.FillRectangle(bgBrush, ClientRectangle);
+                }
+            }
+            else
+            {
+                using (SolidBrush darkBrush = new SolidBrush(Color.FromArgb(10, 45, 105)))
+                {
+                    g.FillRectangle(darkBrush, ClientRectangle);
+                }
+            }
+
+            Rectangle pillRect = new Rectangle(0, 0, Width - 1, Height - 1);
+
+            Color textColor;
+            Color iconColor;
+
+            // 2. Draw Pill Container
             if (_isActive)
             {
+                // Active: Vibrant primary blue pill with crisp white text & icon
                 using (SolidBrush activeBrush = new SolidBrush(Color.FromArgb(24, 119, 242)))
-                using (GraphicsPath path = GetRoundedRectPath(ClientRectangle, 6))
+                using (GraphicsPath path = GetRoundedRectPath(pillRect, 6))
                 {
                     g.FillPath(activeBrush, path);
                 }
+
+                textColor = Color.White;
+                iconColor = Color.White;
             }
             else if (_isHovered)
             {
-                using (SolidBrush hoverBrush = new SolidBrush(Color.FromArgb(35, 255, 255, 255)))
-                using (GraphicsPath path = GetRoundedRectPath(ClientRectangle, 6))
+                // Hovered: Subtle translucent pill with clean light border
+                using (SolidBrush hoverBrush = new SolidBrush(Color.FromArgb(50, 255, 255, 255)))
+                using (Pen hoverPen = new Pen(Color.FromArgb(90, 255, 255, 255), 1F))
+                using (GraphicsPath path = GetRoundedRectPath(pillRect, 6))
                 {
                     g.FillPath(hoverBrush, path);
+                    g.DrawPath(hoverPen, path);
                 }
+
+                textColor = Color.White;
+                iconColor = Color.White;
+            }
+            else
+            {
+                // Unselected: Distinct, visible pill container on dark background so buttons are clearly visible!
+                using (SolidBrush idleBrush = new SolidBrush(Color.FromArgb(22, 255, 255, 255)))
+                using (Pen idlePen = new Pen(Color.FromArgb(45, 255, 255, 255), 1F))
+                using (GraphicsPath path = GetRoundedRectPath(pillRect, 6))
+                {
+                    g.FillPath(idleBrush, path);
+                    g.DrawPath(idlePen, path);
+                }
+
+                // Crisp, high-contrast readable text and icon on dark background
+                textColor = Color.FromArgb(235, 242, 255);
+                iconColor = Color.FromArgb(215, 230, 255);
             }
 
-            // Draw Vector Icon on Left
-            DrawVectorIcon(g, _iconType, 16, 10, 20, 20);
+            // 3. Draw Vector Icon on Left
+            DrawVectorIcon(g, _iconType, 16, 11, 20, 20, iconColor);
 
-            // Draw Title Text at X=46 (safely after icon, crisp bold white text!)
+            // 4. Draw Title Text with bold styling
             using (Font font = new Font("Segoe UI", 10F, FontStyle.Bold))
-            using (SolidBrush textBrush = new SolidBrush(Color.White))
+            using (SolidBrush textBrush = new SolidBrush(textColor))
             {
-                g.DrawString(_title, font, textBrush, 46, 10);
+                g.DrawString(_title, font, textBrush, 46, 11);
             }
         }
 
-        private static void DrawVectorIcon(Graphics g, NavIconType type, int x, int y, int w, int h)
+        private static void DrawVectorIcon(Graphics g, NavIconType type, int x, int y, int w, int h, Color color)
         {
-            using (Pen pen = new Pen(Color.White, 2F))
-            using (SolidBrush brush = new SolidBrush(Color.White))
+            using (Pen pen = new Pen(color, 2F))
+            using (SolidBrush brush = new SolidBrush(color))
             {
                 pen.LineJoin = LineJoin.Round;
 
