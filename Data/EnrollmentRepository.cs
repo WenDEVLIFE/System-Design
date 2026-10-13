@@ -12,7 +12,7 @@ namespace System_Design
 
             using (MySqlConnection connection = Database.OpenConnection())
             using (MySqlCommand command = new MySqlCommand(
-                @"SELECT e.id, e.student_id, e.course_id, e.prelim, e.midterm, e.finals, e.activities,
+                @"SELECT e.id, e.student_id, e.course_id, e.prelim, e.midterm, e.pre_final, e.finals, e.activities,
                          e.grade, e.gpa, e.school_year, e.semester, e.enrolled_at,
                          s.student_number, CONCAT(s.first_name, ' ', s.last_name) AS student_name,
                          c.code AS course_code, c.name AS course_name
@@ -38,7 +38,7 @@ namespace System_Design
 
             using (MySqlConnection connection = Database.OpenConnection())
             using (MySqlCommand command = new MySqlCommand(
-                @"SELECT e.id, e.student_id, e.course_id, e.prelim, e.midterm, e.finals, e.activities,
+                @"SELECT e.id, e.student_id, e.course_id, e.prelim, e.midterm, e.pre_final, e.finals, e.activities,
                          e.grade, e.gpa, e.school_year, e.semester, e.enrolled_at,
                          s.student_number, CONCAT(s.first_name, ' ', s.last_name) AS student_name,
                          c.code AS course_code, c.name AS course_name
@@ -69,7 +69,7 @@ namespace System_Design
 
             using (MySqlConnection connection = Database.OpenConnection())
             using (MySqlCommand command = new MySqlCommand(
-                @"SELECT e.id, e.student_id, e.course_id, e.prelim, e.midterm, e.finals, e.activities,
+                @"SELECT e.id, e.student_id, e.course_id, e.prelim, e.midterm, e.pre_final, e.finals, e.activities,
                          e.grade, e.gpa, e.school_year, e.semester, e.enrolled_at,
                          s.student_number, CONCAT(s.first_name, ' ', s.last_name) AS student_name,
                          c.code AS course_code, c.name AS course_name
@@ -135,15 +135,15 @@ namespace System_Design
             }
         }
 
-        public bool SaveGradeBreakdown(int studentId, int courseId, decimal? prelim, decimal? midterm, decimal? finals, decimal? activities, decimal? grade, decimal? gpa, string schoolYear, string semester)
+        public bool SaveGradeBreakdown(int studentId, int courseId, decimal? prelim, decimal? midterm, decimal? preFinal, decimal? finals, decimal? grade, decimal? gpa, string schoolYear, string semester)
         {
             using (MySqlConnection connection = Database.OpenConnection())
             using (MySqlCommand command = new MySqlCommand(
                 @"UPDATE enrollments
                   SET prelim = @prelim,
                       midterm = @midterm,
+                      pre_final = @preFinal,
                       finals = @finals,
-                      activities = @activities,
                       grade = @grade,
                       gpa = @gpa,
                       school_year = @schoolYear,
@@ -153,8 +153,8 @@ namespace System_Design
             {
                 command.Parameters.AddWithValue("@prelim", (object)prelim ?? DBNull.Value);
                 command.Parameters.AddWithValue("@midterm", (object)midterm ?? DBNull.Value);
+                command.Parameters.AddWithValue("@preFinal", (object)preFinal ?? DBNull.Value);
                 command.Parameters.AddWithValue("@finals", (object)finals ?? DBNull.Value);
-                command.Parameters.AddWithValue("@activities", (object)activities ?? DBNull.Value);
                 command.Parameters.AddWithValue("@grade", (object)grade ?? DBNull.Value);
                 command.Parameters.AddWithValue("@gpa", (object)gpa ?? DBNull.Value);
                 command.Parameters.AddWithValue("@schoolYear", (object)schoolYear ?? "2024-2025");
@@ -192,6 +192,7 @@ namespace System_Design
                 CourseId = reader.GetInt32(reader.GetOrdinal("course_id")),
                 Prelim = ReadNullableDecimal(reader, "prelim"),
                 Midterm = ReadNullableDecimal(reader, "midterm"),
+                PreFinal = ReadNullableDecimal(reader, "pre_final"),
                 Finals = ReadNullableDecimal(reader, "finals"),
                 Activities = ReadNullableDecimal(reader, "activities"),
                 Grade = ReadNullableDecimal(reader, "grade"),
@@ -208,14 +209,28 @@ namespace System_Design
 
         private static string ReadNullableString(MySqlDataReader reader, string column)
         {
-            int ordinal = reader.GetOrdinal(column);
-            return reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
+            try
+            {
+                int ordinal = reader.GetOrdinal(column);
+                return reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static decimal? ReadNullableDecimal(MySqlDataReader reader, string column)
         {
-            int ordinal = reader.GetOrdinal(column);
-            return reader.IsDBNull(ordinal) ? (decimal?)null : reader.GetDecimal(ordinal);
+            try
+            {
+                int ordinal = reader.GetOrdinal(column);
+                return reader.IsDBNull(ordinal) ? (decimal?)null : reader.GetDecimal(ordinal);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

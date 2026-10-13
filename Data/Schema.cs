@@ -26,7 +26,8 @@ namespace System_Design
                 // Migrations for enrollment extended grade attributes
                 AddColumnIfNotExists(connection, "enrollments", "prelim", "DECIMAL(5,2) NULL AFTER course_id");
                 AddColumnIfNotExists(connection, "enrollments", "midterm", "DECIMAL(5,2) NULL AFTER prelim");
-                AddColumnIfNotExists(connection, "enrollments", "finals", "DECIMAL(5,2) NULL AFTER midterm");
+                AddColumnIfNotExists(connection, "enrollments", "pre_final", "DECIMAL(5,2) NULL AFTER midterm");
+                AddColumnIfNotExists(connection, "enrollments", "finals", "DECIMAL(5,2) NULL AFTER pre_final");
                 AddColumnIfNotExists(connection, "enrollments", "activities", "DECIMAL(5,2) NULL AFTER finals");
                 AddColumnIfNotExists(connection, "enrollments", "gpa", "DECIMAL(3,2) NULL AFTER grade");
                 AddColumnIfNotExists(connection, "enrollments", "school_year", "VARCHAR(20) NULL DEFAULT '2024-2025' AFTER gpa");
@@ -123,6 +124,7 @@ namespace System_Design
                 course_id INT UNSIGNED NOT NULL,
                 prelim DECIMAL(5,2) NULL,
                 midterm DECIMAL(5,2) NULL,
+                pre_final DECIMAL(5,2) NULL,
                 finals DECIMAL(5,2) NULL,
                 activities DECIMAL(5,2) NULL,
                 grade DECIMAL(5,2) NULL,

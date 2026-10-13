@@ -14,6 +14,8 @@ namespace System_Design
 
         public decimal? Midterm { get; set; }
 
+        public decimal? PreFinal { get; set; }
+
         public decimal? Finals { get; set; }
 
         public decimal? Activities { get; set; }
