@@ -174,6 +174,7 @@ namespace System_Design
 
             _dgvGrades.Columns.Add("Prelim", "Prelim");
             _dgvGrades.Columns.Add("Midterm", "Midterm");
+            _dgvGrades.Columns.Add("PreFinal", "Pre-Final");
             _dgvGrades.Columns.Add("Finals", "Finals");
 
             _dgvGrades.Columns.Add("GPA", "GPA");
@@ -345,6 +346,7 @@ namespace System_Design
                             en.StudentName,
                             en.Prelim.HasValue ? en.Prelim.Value.ToString("0.##") : "",
                             en.Midterm.HasValue ? en.Midterm.Value.ToString("0.##") : "",
+                            en.PreFinal.HasValue ? en.PreFinal.Value.ToString("0.##") : "",
                             en.Finals.HasValue ? en.Finals.Value.ToString("0.##") : "",
                             en.Gpa.HasValue ? en.Gpa.Value.ToString("0.00") : ""
                         );
@@ -353,11 +355,11 @@ namespace System_Design
                 else
                 {
                     // Fallback sample rows matching user design mockup
-                    _dgvGrades.Rows.Add(0, 1, 1, "2023-0001", "Juan Dela Cruz", "91", "88", "92", "1.50");
-                    _dgvGrades.Rows.Add(0, 2, 2, "2023-0002", "Maria Santos", "94", "85", "88", "1.75");
-                    _dgvGrades.Rows.Add(0, 3, 3, "2023-0003", "Pedro Reyes", "92", "78", "80", "2.00");
-                    _dgvGrades.Rows.Add(0, 4, 4, "2023-0004", "Ana Cruz", "97", "92", "93", "1.25");
-                    _dgvGrades.Rows.Add(0, 5, 5, "2023-0005", "Juan M. Reyes", "98", "84", "87", "1.50");
+                    _dgvGrades.Rows.Add(0, 1, 1, "2023-0001", "Juan Dela Cruz", "91", "88", "90", "92", "1.50");
+                    _dgvGrades.Rows.Add(0, 2, 2, "2023-0002", "Maria Santos", "94", "85", "87", "88", "1.75");
+                    _dgvGrades.Rows.Add(0, 3, 3, "2023-0003", "Pedro Reyes", "92", "78", "82", "80", "2.00");
+                    _dgvGrades.Rows.Add(0, 4, 4, "2023-0004", "Ana Cruz", "97", "92", "94", "93", "1.25");
+                    _dgvGrades.Rows.Add(0, 5, 5, "2023-0005", "Juan M. Reyes", "98", "84", "88", "87", "1.50");
                 }
             }
             catch (Exception ex)
@@ -371,7 +373,7 @@ namespace System_Design
             if (e.RowIndex < 0) return;
 
             string colName = _dgvGrades.Columns[e.ColumnIndex].Name;
-            if (colName == "Prelim" || colName == "Midterm" || colName == "Finals")
+            if (colName == "Prelim" || colName == "Midterm" || colName == "PreFinal" || colName == "Finals")
             {
                 ComputeRowGrade(_dgvGrades.Rows[e.RowIndex]);
             }
@@ -390,6 +392,7 @@ namespace System_Design
         {
             decimal prelim = ParseCellDecimal(row.Cells["Prelim"].Value);
             decimal midterm = ParseCellDecimal(row.Cells["Midterm"].Value);
+            decimal preFinal = ParseCellDecimal(row.Cells["PreFinal"].Value);
             decimal finals = ParseCellDecimal(row.Cells["Finals"].Value);
 
             int count = 0;
@@ -397,6 +400,7 @@ namespace System_Design
 
             if (prelim > 0) { sum += prelim; count++; }
             if (midterm > 0) { sum += midterm; count++; }
+            if (preFinal > 0) { sum += preFinal; count++; }
             if (finals > 0) { sum += finals; count++; }
 
             if (count > 0)
@@ -449,6 +453,7 @@ namespace System_Design
 
                     decimal? prelim = ParseNullableDecimal(row.Cells["Prelim"].Value);
                     decimal? midterm = ParseNullableDecimal(row.Cells["Midterm"].Value);
+                    decimal? preFinal = ParseNullableDecimal(row.Cells["PreFinal"].Value);
                     decimal? finals = ParseNullableDecimal(row.Cells["Finals"].Value);
                     decimal? gpa = ParseNullableDecimal(row.Cells["GPA"].Value);
 
@@ -457,6 +462,7 @@ namespace System_Design
                     decimal sum = 0;
                     if (prelim.HasValue && prelim.Value > 0) { sum += prelim.Value; count++; }
                     if (midterm.HasValue && midterm.Value > 0) { sum += midterm.Value; count++; }
+                    if (preFinal.HasValue && preFinal.Value > 0) { sum += preFinal.Value; count++; }
                     if (finals.HasValue && finals.Value > 0) { sum += finals.Value; count++; }
                     if (count > 0) { grade = Math.Round(sum / count, 2); }
 
@@ -465,7 +471,7 @@ namespace System_Design
                         courseId,
                         prelim,
                         midterm,
-                        null,
+                        preFinal,
                         finals,
                         grade,
                         gpa,
@@ -500,6 +506,7 @@ namespace System_Design
             {
                 row.Cells["Prelim"].Value = "";
                 row.Cells["Midterm"].Value = "";
+                row.Cells["PreFinal"].Value = "";
                 row.Cells["Finals"].Value = "";
                 row.Cells["GPA"].Value = "";
             }
